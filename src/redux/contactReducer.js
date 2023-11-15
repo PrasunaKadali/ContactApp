@@ -2,9 +2,8 @@ import {
   ADD_CONTACT,
   EDIT_CONTACT,
   DELETE_CONTACT,
-  GET_CONTACTS,
   ADD_IMAGE,
-} from "./actionTypes";
+} from "../redux/actionTypes";
 const initialState = {
   contacts: [],
   selectedImage: null,

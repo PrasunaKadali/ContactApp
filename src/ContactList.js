@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import { editContact, deleteContact } from "../redux/contactAction";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { editContact, deleteContact } from "../src/redux/contactAction";
 import { connect, useDispatch } from "react-redux";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,7 +13,7 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
   const handleEdit = (contactPhone) => {
     const contact = contacts.find((contact) => contact.phone === contactPhone);
     if (contact) {
-      navigation.navigate("Edit Contact", {
+      navigation.navigate("EditContact", {
         contact,
         selectedImage: contact.selectedImage,
       });
@@ -24,7 +24,7 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
     const contact = contacts.find((contact) => contact.phone === contactPhone);
     if (contact) {
       dispatch(deleteContact(contact));
-      navigation.navigate("My Contacts");
+      navigation.navigate("MyContacts");
     }
   };
 
@@ -42,7 +42,7 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
       <View>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("My Contacts", {
+            navigation.navigate("MyContacts", {
               name,
               email,
               phone,
@@ -53,10 +53,7 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/3771/3771518.png",
             }}
-            style={{
-              width: 1,
-              height: 1,
-            }}
+            style={styles.img1}
           />
         </TouchableOpacity>
       </View>
@@ -72,11 +69,7 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
               source={{
                 uri: selectedImage,
               }}
-              style={{
-                width: 90,
-                height: 90,
-                borderRadius: 45,
-              }}
+              style={styles.img2}
             />
           ) : (
             <FontAwesome5
@@ -89,26 +82,9 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
           )}
         </View>
         <View>
-          <Text
-            style={{
-              color: "black",
-              fontWeight: "bold",
-              fontSize: 25,
-              marginTop: 10,
-              justifyContent: "center",
-            }}
-          >
-            {name}
-          </Text>
+          <Text style={styles.names}>{name}</Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: 15,
-            columnGap: 10,
-            marginLeft: 10,
-          }}
-        >
+        <View style={styles.conatiner}>
           <FontAwesome5
             name="phone-alt"
             size={20}
@@ -116,38 +92,12 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
             alignSelf="center"
           />
 
-          <View
-            style={{
-              justifyContent: "space-between",
-              flexDirection: "column",
-            }}
-          >
-            <Text
-              style={{
-                color: "black",
-                fontSize: 18,
-              }}
-            >
-              {phone}
-            </Text>
-            <Text
-              style={{
-                color: "black",
-                fontSize: 15,
-              }}
-            >
-              PhoneNumber
-            </Text>
+          <View style={styles.conatiner2}>
+            <Text style={styles.text1}>{phone}</Text>
+            <Text style={styles.text2}>PhoneNumber</Text>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            columnGap: 10,
-            marginTop: 20,
-            marginLeft: 10,
-          }}
-        >
+        <View style={styles.conatiner}>
           <MaterialCommunityIcons
             name="email-outline"
             size={24}
@@ -155,78 +105,26 @@ const ContactsList = ({ navigation, route, deleteContact, contacts }) => {
             alignSelf="center"
           />
 
-          <View
-            style={{
-              flexDirection: "column",
-            }}
-          >
-            <Text
-              style={{
-                color: "black",
-                fontSize: 20,
-              }}
-            >
-              {email}
-            </Text>
-            <Text
-              style={{
-                color: "black",
-                fontSize: 15,
-              }}
-            >
-              Email
-            </Text>
+          <View style={styles.conatiner2}>
+            <Text style={styles.text1}>{email}</Text>
+            <Text style={styles.text2}>Email</Text>
           </View>
         </View>
         {menuOpen && (
-          <View
-            style={{
-              justifyContent: "space-between",
-              flexDirection: "row",
-              paddingLeft: 20,
-              paddingRight: 20,
-              paddingTop: 20,
-            }}
-          >
+          <View style={styles.menus}>
             <TouchableOpacity
               testID="edit-contact-button"
-              style={{
-                marginTop: 10,
-                width: 100,
-                justifyContent: "center",
-                alignItems: "center",
-                height: 40,
-                borderRadius: 5,
-                borderWidth: 1,
-              }}
+              style={styles.button}
             >
-              <Text
-                style={{
-                  color: "black",
-                }}
-                onPress={() => handleEdit(phone)}
-              >
+              <Text style={styles.buttext} onPress={() => handleEdit(phone)}>
                 Edit Contact
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               testID="delete-contact-button"
-              style={{
-                marginTop: 10,
-                width: 120,
-                justifyContent: "center",
-                alignItems: "center",
-                height: 40,
-                borderWidth: 1,
-                borderRadius: 5,
-              }}
+              style={styles.button}
             >
-              <Text
-                style={{
-                  color: "black",
-                }}
-                onPress={() => handleDelete(phone)}
-              >
+              <Text style={styles.buttext} onPress={() => handleDelete(phone)}>
                 Delete Contact
               </Text>
             </TouchableOpacity>
@@ -245,4 +143,57 @@ const mapDispatchToProps = {
   editContact,
   deleteContact,
 };
+
+const styles = StyleSheet.create({
+  conatiner: {
+    flexDirection: "row",
+    marginTop: 15,
+    columnGap: 10,
+    marginLeft: 10,
+  },
+  conatiner2: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  button: {
+    marginTop: 10,
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  buttext: {
+    color: "black",
+  },
+  text1: {
+    color: "black",
+    fontSize: 18,
+  },
+  text2: {
+    color: "black",
+    fontSize: 15,
+  },
+  names: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 25,
+    marginTop: 10,
+    justifyContent: "center",
+  },
+  menus: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
+  },
+  img1: { width: 1, height: 1 },
+  img2: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+  },
+});
 export default connect(mapStateToProps, mapDispatchToProps)(ContactsList);

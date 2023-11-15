@@ -6,14 +6,15 @@ import {
   TextInput,
   Alert,
   Image,
+  StyleSheet,
 } from "react-native";
-import { addContact } from "../redux/contactAction";
+import { addContact } from "../src/redux/contactAction";
 import { connect, useDispatch } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { addImage } from "../redux/contactAction";
+import { addImage } from "../src/redux/contactAction";
 
 const AddContact = ({ navigation, addContact, route }) => {
   const [name, setName] = useState("");
@@ -44,7 +45,7 @@ const AddContact = ({ navigation, addContact, route }) => {
       dispatch(addImage(selectedImage));
     }
 
-    navigation.navigate("My Contacts", {
+    navigation.navigate("MyContacts", {
       name: name,
       email: email,
       phone: phone,
@@ -69,40 +70,20 @@ const AddContact = ({ navigation, addContact, route }) => {
   };
 
   return (
-    <View style={{ marginLeft: 10 }}>
-      <View
-        style={{
-          justifyContent: "centre",
-          alignContent: "centre",
-          marginBottom: 20,
-          marginTop: 20,
-          alignSelf: "center",
-        }}
-      >
+    <View style={styles.container}>
+      <View style={styles.container2}>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           {selectedImage ? (
-            <Image
-              source={{ uri: selectedImage }}
-              style={{ width: 100, height: 100, borderRadius: 50 }}
-            />
+            <Image source={{ uri: selectedImage }} style={styles.img} />
           ) : imageUri ? (
-            <Image
-              source={{ uri: imageUri }}
-              style={{ width: 100, height: 100, borderRadius: 50 }}
-            />
+            <Image source={{ uri: imageUri }} style={styles.img} />
           ) : (
             <Feather name="camera" size={50} color="black" />
           )}
         </TouchableOpacity>
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          columnGap: 40,
-          marginBottom: 40,
-        }}
-      >
+      <View style={styles.container3}>
         <AntDesign name="user" size={40} color="black" />
 
         <TextInput
@@ -110,22 +91,10 @@ const AddContact = ({ navigation, addContact, route }) => {
           value={name}
           maxLength={28}
           onChangeText={(text) => setName(text)}
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            paddingHorizontal: 40,
-            color: "blue",
-            width: 250,
-          }}
+          style={styles.texting}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          columnGap: 40,
-          marginBottom: 40,
-        }}
-      >
+      <View style={styles.container3}>
         <MaterialCommunityIcons
           name="email-outline"
           size={40}
@@ -140,34 +109,11 @@ const AddContact = ({ navigation, addContact, route }) => {
           onChangeText={handleEmailChange}
           keyboardType="email-address"
           autoCapitalize="none"
-          style={{
-            fontSize: 20,
-            color: "blue",
-            borderWidth: 1,
-            paddingHorizontal: 40,
-            width: 250,
-          }}
+          style={styles.texting}
         />
       </View>
-      {!isValidEmail && (
-        <Text
-          style={{
-            color: "red",
-            justifyContent: "center",
-            alignContent: "center",
-            marginLeft: 120,
-          }}
-        >
-          Invalid Email
-        </Text>
-      )}
-      <View
-        style={{
-          flexDirection: "row",
-          columnGap: 40,
-          marginBottom: 40,
-        }}
-      >
+      {!isValidEmail && <Text style={styles.emails}>Invalid Email</Text>}
+      <View style={styles.container3}>
         <Feather name="phone" size={40} color="black" alignSelf="center" />
 
         <TextInput
@@ -176,29 +122,12 @@ const AddContact = ({ navigation, addContact, route }) => {
           maxLength={10}
           keyboardType="phone-pad"
           onChangeText={(text) => onChanged(text)}
-          style={{
-            fontSize: 20,
-            color: "blue",
-            borderWidth: 1,
-            paddingHorizontal: 40,
-            width: 250,
-          }}
+          style={styles.texting}
         />
       </View>
       <View>
         <TouchableOpacity
-          style={{
-            width: 100,
-            justifyContent: "center",
-            alignItems: "center",
-            height: 50,
-            borderRadius: 5,
-            fontSize: 40,
-            alignSelf: "center",
-            borderWidth: 1,
-            marginLeft: 30,
-            marginRight: 20,
-          }}
+          style={styles.save}
           onPress={() => handleSaveContact()}
         >
           <Text
@@ -218,5 +147,51 @@ const AddContact = ({ navigation, addContact, route }) => {
 const mapDispatchToProps = {
   addContact,
 };
+
+const styles = StyleSheet.create({
+  container: { marginLeft: 10 },
+  container2: {
+    justifyContent: "centre",
+    alignContent: "centre",
+    marginBottom: 20,
+    marginTop: 20,
+    alignSelf: "center",
+  },
+  img: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  container3: {
+    flexDirection: "row",
+    columnGap: 40,
+    marginBottom: 40,
+  },
+  texting: {
+    fontSize: 20,
+    color: "blue",
+    borderWidth: 1,
+    paddingHorizontal: 40,
+    width: 250,
+  },
+  emails: {
+    color: "red",
+    justifyContent: "center",
+    alignContent: "center",
+    marginLeft: 120,
+  },
+  save: {
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 5,
+    fontSize: 40,
+    alignSelf: "center",
+    borderWidth: 1,
+    marginLeft: 30,
+    marginRight: 20,
+  },
+});
 
 export default connect(null, mapDispatchToProps)(AddContact);

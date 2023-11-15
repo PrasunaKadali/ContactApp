@@ -5,10 +5,8 @@ import configureStore from "redux-mock-store";
 import AddContact from "../src/AddContact";
 
 const mockStore = configureStore();
-
+let store;
 describe("AddContact Component", () => {
-  let store;
-
   beforeEach(() => {
     store = mockStore({});
   });

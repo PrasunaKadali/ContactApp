@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-import { View, TextInput, Image, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+} from "react-native";
 import { useDispatch } from "react-redux";
-import { editContact } from "../redux/contactAction";
+import { editContact } from "../src/redux/contactAction";
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 import { Feather } from "@expo/vector-icons";
 
 const EditContact = ({ route, navigation }) => {
@@ -37,32 +43,22 @@ const EditContact = ({ route, navigation }) => {
     };
     console.log("Updated Contact:", updatedContact);
     dispatch(editContact(updatedContact));
-    navigation.navigate("My Contacts");
+    navigation.navigate("MyContacts");
   };
 
   return (
     <View style={{ marginLeft: 10 }}>
-      <View
-        style={{
-          justifyContent: "center",
-          alignContent: "center",
-          alignSelf: "center",
-          marginBottom: 20,
-        }}
-      >
+      <View style={styles.container}>
         <TouchableOpacity
           onPress={handleImagePicker}
           testID="imagePickerButton"
         >
           {editedImage ? (
-            <Image
-              source={{ uri: editedImage }}
-              style={{ width: 100, height: 100, borderRadius: 50 }}
-            />
+            <Image source={{ uri: editedImage }} style={styles.img1} />
           ) : contact.selectedImage ? (
             <Image
               source={{ uri: contact.selectedImage }}
-              style={{ width: 50, height: 50, borderRadius: 50 }}
+              style={styles.img2}
             />
           ) : (
             <FontAwesome5
@@ -74,13 +70,7 @@ const EditContact = ({ route, navigation }) => {
           )}
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          columnGap: 40,
-          marginBottom: 40,
-        }}
-      >
+      <View style={styles.container2}>
         <AntDesign name="user" size={40} color="black" />
 
         <TextInput
@@ -90,22 +80,10 @@ const EditContact = ({ route, navigation }) => {
           onChangeText={(text) =>
             setEditedContact({ ...editedContact, name: text })
           }
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            paddingHorizontal: 40,
-            color: "blue",
-            width: 250,
-          }}
+          style={styles.data}
         />
       </View>
-      <View
-        style={{
-          flexDirection: "row",
-          columnGap: 40,
-          marginBottom: 10,
-        }}
-      >
+      <View style={styles.container2}>
         <MaterialCommunityIcons
           name="email-outline"
           size={40}
@@ -120,24 +98,11 @@ const EditContact = ({ route, navigation }) => {
           onChangeText={(text) =>
             setEditedContact({ ...editedContact, email: text })
           }
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            paddingHorizontal: 40,
-            color: "blue",
-            width: 250,
-          }}
+          style={styles.data}
         />
       </View>
 
-      <View
-        style={{
-          flexDirection: "row",
-          columnGap: 40,
-          marginBottom: 40,
-          marginTop: 30,
-        }}
-      >
+      <View style={styles.container2}>
         <Feather name="phone" size={40} color="black" alignSelf="center" />
 
         <TextInput
@@ -147,41 +112,56 @@ const EditContact = ({ route, navigation }) => {
           onChangeText={(text) =>
             setEditedContact({ ...editedContact, phone: text })
           }
-          style={{
-            fontSize: 20,
-            borderWidth: 1,
-            paddingHorizontal: 40,
-            color: "blue",
-            width: 250,
-          }}
+          style={styles.data}
         />
       </View>
       <View style={{ paddingTop: 20 }}>
         <TouchableOpacity
-          style={{
-            backgroundColor: "blue",
-            width: 100,
-            justifyContent: "center",
-            alignItems: "center",
-            height: 50,
-            borderRadius: 5,
-            fontSize: 40,
-            marginLeft: 150,
-          }}
+          style={styles.save}
           onPress={() => handleSave()}
           testID="saveButton"
         >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 30,
-            }}
-          >
-            Save
-          </Text>
+          <Text style={styles.savetext}>Save</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignContent: "center",
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  container2: {
+    flexDirection: "row",
+    columnGap: 40,
+    marginBottom: 40,
+  },
+  data: {
+    fontSize: 20,
+    borderWidth: 1,
+    paddingHorizontal: 40,
+    color: "blue",
+    width: 250,
+  },
+  save: {
+    backgroundColor: "blue",
+    width: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    borderRadius: 5,
+    fontSize: 40,
+    marginLeft: 150,
+  },
+  savetext: {
+    color: "white",
+    fontSize: 30,
+  },
+  img1: { width: 100, height: 100, borderRadius: 50 },
+  img2: { width: 50, height: 50, borderRadius: 50 },
+});
 export default EditContact;

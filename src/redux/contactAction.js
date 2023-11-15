@@ -3,7 +3,7 @@ import {
   DELETE_CONTACT,
   EDIT_CONTACT,
   ADD_IMAGE,
-} from "./actionTypes";
+} from "../redux/actionTypes";
 
 export const addContact = (contact, selectedImage) => {
   return {

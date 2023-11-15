@@ -1,20 +1,26 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { connect } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
-import { useEffect } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { editContact } from "../redux/contactAction";
+import { editContact } from "../src/redux/contactAction";
 
-const ContactForm = ({ navigation, contacts, editContact }) => {
+const ContactForm = ({ navigation, contacts }) => {
   const route = useRoute();
   const name = route.params?.name;
   const email = route.params?.email;
   const phone = route.params?.phone;
 
   const handleAdd = () => {
-    navigation.navigate("Create Contact");
+    navigation.navigate("CreateContact");
   };
   const uniqueContacts = [
     ...new Set(contacts.map((contact) => contact.phone)),
@@ -27,37 +33,16 @@ const ContactForm = ({ navigation, contacts, editContact }) => {
     }
     return 0;
   });
-  // console.log("Unique Contacts:", uniqueContacts);
 
   return (
     <View>
-      <View
-        style={{
-          justifyContent: "center",
-          marginTop: 30,
-          marginLeft: 1,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row",
-            columnGap: 5,
-            alignSelf: "center",
-          }}
-          onPress={handleAdd}
-        >
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.create} onPress={handleAdd}>
           <AntDesign name="adduser" size={20} color="black" />
           <Text style={{ color: "black", fontSize: 20 }}>Create Contact</Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          marginTop: 10,
-          marginLeft: 10,
-        }}
-      >
+      <View style={styles.container2}>
         <FlatList
           data={uniqueContacts}
           keyExtractor={(item) => item.phone}
@@ -71,38 +56,13 @@ const ContactForm = ({ navigation, contacts, editContact }) => {
                   selectedImage: item.selectedImage,
                 })
               }
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                columnGap: 10,
-              }}
+              style={styles.touch}
               key={item.phone}
             >
-              {/* {updatedContact && updatedContact.item.selectedImage ? (
-                <Image
-                  source={{ uri: updatedContact.item.selectedImage }}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 25,
-                  }}
-                />
-              ) : (
-                <FontAwesome5
-                  name="user-circle"
-                  size={30}
-                  color="black"
-                  alignSelf="center"
-                />
-              )} */}
               {item.selectedImage ? (
                 <Image
                   source={{ uri: item.selectedImage }}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 25,
-                  }}
+                  style={styles.img}
                 />
               ) : (
                 <FontAwesome5
@@ -113,15 +73,7 @@ const ContactForm = ({ navigation, contacts, editContact }) => {
                 />
               )}
 
-              <Text
-                style={{
-                  color: "black",
-                  fontSize: 20,
-                  marginTop: 10,
-                  justifyContent: "center",
-                }}
-                numberOfLines={1}
-              >
+              <Text style={styles.names} numberOfLines={1}>
                 {item.name}
               </Text>
             </TouchableOpacity>
@@ -141,4 +93,39 @@ const mapDispatchToProps = (dispatch) => {
     editContact: (contact) => dispatch(editContact(contact)),
   };
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    marginTop: 30,
+    marginLeft: 1,
+  },
+  create: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    columnGap: 5,
+    alignSelf: "center",
+  },
+  container2: {
+    marginTop: 10,
+    marginLeft: 10,
+  },
+  touch: {
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: 10,
+  },
+  img: {
+    width: 30,
+    height: 30,
+    borderRadius: 25,
+  },
+  names: {
+    color: "black",
+    fontSize: 20,
+    marginTop: 10,
+    justifyContent: "center",
+  },
+});
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
